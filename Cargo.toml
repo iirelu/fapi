@@ -1,0 +1,12 @@
+[package]
+name = "fapi"
+version = "0.1.0"
+authors = ["iirelu <anna@bawk.space>"]
+
+[dependencies]
+reqwest = "0.9.17"
+select = "0.4.2"
+regex = "1.1.6"
+rocket = "0.4.1"
+rocket_codegen = "0.4.1"
+rocket_contrib = "0.4.1"
