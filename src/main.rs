@@ -15,14 +15,13 @@ use rocket::State;
 use rocket::http::Status;
 use select::document::Document;
 use select::predicate;
-use select::node::Node;
 
 const NOT_FOUND_TEXT: &'static str =
     "The submission you are trying to find is not in our database.";
 
 #[get("/submission/<id>")]
 fn submission(id: u64, fa_req: State<FaReq>) -> Result<JsonValue, Status> {
-    use select::predicate::{Descendant, Attr, Class};
+    use select::predicate::{Attr, Class};
 
     let body = fa_req.get_submission_page(id)
         .map_err(|_| Status::NotFound)?;
@@ -39,12 +38,11 @@ fn submission(id: u64, fa_req: State<FaReq>) -> Result<JsonValue, Status> {
         .and_then(|img| img.attr("src"))
         .ok_or(Status::InternalServerError)?;
 
-    let avatar = doc.find(Descendant(Class("maintable"), Class("avatar"))).next()
+    let avatar = doc.find(Class("avatar")).nth(1)
         .and_then(|img| img.attr("src"))
         .ok_or(Status::InternalServerError)?;
 
-    let attribution = doc.find(|n: &Node| n.text() == " - by ").next()
-        .and_then(|n| n.parent())
+    let attribution = dbg!(doc.find(Class("information")).next())
         .ok_or(Status::InternalServerError)?
         .children().collect::<Vec<_>>();
 
