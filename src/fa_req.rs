@@ -14,7 +14,7 @@ impl FaReq {
 
     pub fn get_submission_page(&self, id: u64) -> ReqResult<Response> {
         self.client.get(&format!("https://www.furaffinity.net/view/{}", id))
-            .header("Cookie", include_str!("LOGIN_COOKIE"))
+            .header("Cookie", include_str!("LOGIN_COOKIE").trim())
             .send()
     }
 }
